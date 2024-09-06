@@ -1,0 +1,66 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { IDataServices } from '@framework/providers/data.provider';
+import { CustomException } from '@libs/base/exceptions';
+import { CustomCodes } from '@libs/common/exceptions';
+import { handleGeneralExceptionsHelper } from '@libs/base/helpers';
+import { {{pascalCase nameEntity}}sCreate, {{pascalCase nameEntity}}sEdit } from '@domain/{{camelCase nameEntity}}s';
+import { ConfigType } from '@nestjs/config';
+import config from '@config/config';
+
+@Injectable()
+export class {{pascalCase nameEntity}}sUseCases {
+  constructor(
+    private dataServices: IDataServices,
+    @Inject(config.KEY) private configService: ConfigType<typeof config>,
+  ) {}
+
+  async create(data: {{pascalCase nameEntity}}sCreate) {
+    try {
+      return await this.dataServices.{{camelCase nameEntity}}s.create(data);
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
+  }
+
+  async getById(id: string) {
+    const {{camelCase nameEntity}} = await this.dataServices.{{camelCase nameEntity}}s.getById(id);
+
+    if (!{{camelCase nameEntity}}) {
+      throw new CustomException(CustomCodes.{{camelCase nameEntity}}NotFound);
+    }
+
+    return {{camelCase nameEntity}};
+  }
+
+  async listAll() {
+    return await this.dataServices.{{camelCase nameEntity}}s.getAll();
+  }
+
+  async update(id: string, data: {{pascalCase nameEntity}}sEdit) {
+    const edited{{pascalCase nameEntity}} = await this.dataServices.{{camelCase nameEntity}}s.updateById(id, data);
+
+    if (!edited{{pascalCase nameEntity}}) {
+      throw new CustomException(CustomCodes.{{camelCase nameEntity}}NotFound);
+    }
+
+    return edited{{pascalCase nameEntity}};
+  }
+
+  async delete(id: string) {
+    const deleted{{pascalCase nameEntity}} = await this.dataServices.{{camelCase nameEntity}}s.deleteById(id);
+
+    if (!deleted{{pascalCase nameEntity}}) {
+      throw new CustomException(CustomCodes.{{camelCase nameEntity}}NotFound);
+    }
+
+    return deleted{{pascalCase nameEntity}};
+  }
+
+  private handleDBExceptions(error: any) {
+    if (error.code === 11000) {
+      throw new CustomException(CustomCodes.{{camelCase nameEntity}}Duplicated);
+    }
+
+    handleGeneralExceptionsHelper(error);
+  }
+}

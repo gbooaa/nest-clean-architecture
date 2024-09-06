@@ -1,0 +1,12 @@
+import { BaseAdapter } from '@libs/base/providers/database';
+import {
+  {{pascalCase nameEntity}}sEntity,
+  {{pascalCase nameEntity}}sCreate,
+  {{pascalCase nameEntity}}sEdit,
+} from './{{camelCase nameEntity}}s.entity';
+
+export abstract class {{pascalCase nameEntity}}sAdapter extends BaseAdapter<
+  {{pascalCase nameEntity}}sEntity,
+  {{pascalCase nameEntity}}sCreate,
+  {{pascalCase nameEntity}}sEdit
+> {}

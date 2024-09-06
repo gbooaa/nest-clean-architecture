@@ -1,0 +1,53 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { ParseMongoIdPipe } from '@libs/base/pipes';
+import { {{pascalCase nameEntity}}sUseCases } from '@application/{{camelCase nameEntity}}s.use-cases';
+import { Create{{pascalCase nameEntity}}DTO, Update{{pascalCase nameEntity}}DTO } from '@domain/{{camelCase nameEntity}}s';
+import { {{pascalCase nameEntity}}sDocs } from './docs';
+
+@Controller('{{camelCase nameEntity}}s')
+@ApiTags('{{pascalCase nameEntity}}s')
+export class {{pascalCase nameEntity}}sController {
+  constructor(private readonly {{camelCase nameEntity}}sUseCases: {{pascalCase nameEntity}}sUseCases) {}
+
+  @Post()
+  @{{pascalCase nameEntity}}sDocs('create')
+  create(@Body() create{{pascalCase nameEntity}}sData: Create{{pascalCase nameEntity}}DTO) {
+    return this.{{camelCase nameEntity}}sUseCases.create(create{{pascalCase nameEntity}}sData);
+  }
+
+  @Get(':id')
+  @{{pascalCase nameEntity}}sDocs('getById')
+  getById(@Param('id', new ParseMongoIdPipe()) id: string) {
+    return this.{{camelCase nameEntity}}sUseCases.getById(id);
+  }
+
+  @Get()
+  @{{pascalCase nameEntity}}sDocs('list')
+  list() {
+    return this.{{camelCase nameEntity}}sUseCases.listAll();
+  }
+
+  @Patch(':id')
+  @{{pascalCase nameEntity}}sDocs('update')
+  update(
+    @Param('id', new ParseMongoIdPipe()) id: string,
+    @Body() update{{pascalCase nameEntity}}sData: Update{{pascalCase nameEntity}}DTO,
+  ) {
+    return this.{{camelCase nameEntity}}sUseCases.update(id, update{{pascalCase nameEntity}}sData);
+  }
+
+  @Delete(':id')
+  @{{pascalCase nameEntity}}sDocs('delete')
+  delete(@Param('id', new ParseMongoIdPipe()) id: string) {
+    return this.{{camelCase nameEntity}}sUseCases.delete(id);
+  }
+}

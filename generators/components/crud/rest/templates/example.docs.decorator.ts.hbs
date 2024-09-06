@@ -1,0 +1,44 @@
+import { applyDecorators } from '@nestjs/common';
+import { ApiOperation } from '@nestjs/swagger';
+
+export function {{pascalCase nameEntity}}sDocs(endpoint: string) {
+  switch (endpoint) {
+    case 'create':
+      return applyDecorators(
+        ApiOperation({
+          summary: 'Crear nuevo {{camelCase nameEntity}}',
+        }),
+      );
+
+    case 'getById':
+      return applyDecorators(
+        ApiOperation({
+          summary: 'Obtener un {{camelCase nameEntity}}',
+        }),
+      );
+
+    case 'list':
+      return applyDecorators(
+        ApiOperation({
+          summary: 'Obtener un listado de {{camelCase nameEntity}}s',
+        }),
+      );
+
+    case 'update':
+      return applyDecorators(
+        ApiOperation({
+          summary: 'Actualizar {{camelCase nameEntity}}',
+        }),
+      );
+
+    case 'delete':
+      return applyDecorators(
+        ApiOperation({
+          summary: 'Eliminar {{camelCase nameEntity}}',
+        }),
+      );
+
+    default:
+      break;
+  }
+}

@@ -1,0 +1,70 @@
+import {
+  ConnectedSocket,
+  MessageBody,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  OnGatewayInit,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+  WsResponse,
+} from '@nestjs/websockets';
+import { UseFilters } from '@nestjs/common';
+import { Server, Socket } from 'socket.io';
+import { WebsocketExceptionsFilter } from '@libs/base/filters';
+import { ValidDTOPipe } from '@libs/base/pipes';
+import { {{pascalCase nameEntity}}sUseCases } from '@application/{{camelCase nameEntity}}s.use-cases';
+import { {{pascalCase nameEntity}}sEventsMessageDTO, {{pascalCase nameEntity}}sEventsRoomDTO } from '@domain/{{camelCase nameEntity}}s';
+import { {{pascalCase nameEntity}}sPatterns } from './events';
+import { {{pascalCase nameEntity}}sDocs } from './docs';
+import { Join } from '@domain/{{camelCase nameEntity}}s/{{camelCase nameEntity}}s.types';
+
+@WebSocketGateway()
+@UseFilters(WebsocketExceptionsFilter)
+export class {{pascalCase nameEntity}}sGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
+  constructor(private readonly {{camelCase nameEntity}}sUseCases: {{pascalCase nameEntity}}sUseCases) {}
+
+  @WebSocketServer()
+  server: Server;
+
+  afterInit(server: Server) {}
+  handleConnection(client: Socket, ...args: any[]) {}
+  handleDisconnect(client: Socket) {}
+
+  @SubscribeMessage({{pascalCase nameEntity}}sPatterns.join)
+  @{{pascalCase nameEntity}}sDocs('handleJoinRoom')
+  handleJoinRoom(
+    @ConnectedSocket() client: Socket,
+    @MessageBody(new ValidDTOPipe({{pascalCase nameEntity}}sEventsRoomDTO))
+    data: {{pascalCase nameEntity}}sEventsRoomDTO,
+  ): WsResponse<Join> {
+    const { room } = data;
+    client.join(`room_${room}`);
+
+    this.{{camelCase nameEntity}}sUseCases.joinRoom(client.id);
+
+    return { event: {{pascalCase nameEntity}}sPatterns.join, data: { clientId: client.id, room } };
+  }
+
+  @SubscribeMessage({{pascalCase nameEntity}}sPatterns.message)
+  @{{pascalCase nameEntity}}sDocs('handleIncommingMessage')
+  handleIncommingMessage(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() payload: {{pascalCase nameEntity}}sEventsMessageDTO,
+  ) {
+    const { room, message } = payload;
+    this.server.to(`room_${room}`).emit({{pascalCase nameEntity}}sPatterns.new_message, message);
+  }
+
+  @SubscribeMessage({{pascalCase nameEntity}}sPatterns.leave)
+  @{{pascalCase nameEntity}}sDocs('handleRoomLeave')
+  handleRoomLeave(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: {{pascalCase nameEntity}}sEventsRoomDTO,
+  ) {
+    const { room } = data;
+    client.leave(`room_${room}`);
+  }
+}

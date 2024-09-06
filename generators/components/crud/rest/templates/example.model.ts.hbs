@@ -1,0 +1,15 @@
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+
+@Schema({ timestamps: true, collection: '{{snakeCase nameEntity}}s' })
+export class {{pascalCase nameEntity}}s {
+  @Prop({
+    required: true,
+    unique: true,
+  })
+  name: string;
+}
+
+export const {{pascalCase nameEntity}}sSchema = SchemaFactory.createForClass({{pascalCase nameEntity}}s).set(
+  'versionKey',
+  false,
+);

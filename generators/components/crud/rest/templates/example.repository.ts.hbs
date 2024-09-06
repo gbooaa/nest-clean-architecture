@@ -1,0 +1,16 @@
+import { Model, Connection } from 'mongoose';
+import { {{pascalCase nameEntity}}s } from '../models';
+import { MongoBaseRepository } from '@libs/base/providers/database';
+import { {{pascalCase nameEntity}}sAdapter, {{pascalCase nameEntity}}sCreate, {{pascalCase nameEntity}}sEdit, {{pascalCase nameEntity}}sEntity } from '@domain/{{camelCase nameEntity}}s';
+
+export class {{pascalCase nameEntity}}sRepository
+  extends MongoBaseRepository<{{pascalCase nameEntity}}sEntity, {{pascalCase nameEntity}}sCreate, {{pascalCase nameEntity}}sEdit>
+  implements {{pascalCase nameEntity}}sAdapter
+{
+  constructor(
+    private readonly {{camelCase nameEntity}}sModel: Model<{{pascalCase nameEntity}}s>,
+    readonly connection: Connection,
+  ) {
+    super({{camelCase nameEntity}}sModel, connection);
+  }
+}

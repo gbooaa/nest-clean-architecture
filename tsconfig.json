@@ -1,0 +1,68 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@libs/base": [
+        "libs/base/src"
+      ],
+      "@libs/base/*": [
+        "libs/base/src/*"
+      ],
+      "@libs/common": [
+        "libs/common/src"
+      ],
+      "@libs/common/*": [
+        "libs/common/src/*"
+      ],
+      "@application/*": [
+        "src/application/*"
+      ],
+      "@config/*": [
+        "src/config/*"
+      ],
+      "@domain/*": [
+        "src/domain/*"
+      ],
+      "@framework/*": [
+        "src/framework/*"
+      ],
+      "@infraestructure/*": [
+        "src/infraestructure/*"
+      ],
+      "@controllers/*": [
+        "src/infraestructure/controllers/*"
+      ],
+      "@events/*": [
+        "src/infraestructure/events/*"
+      ],
+      "@providers/*": [
+        "src/framework/providers/*"
+      ],
+      "@mongo/*": [
+        "src/framework/mongo/*"
+      ],
+      "@models/*": [
+        "src/framework/mongo/models/*"
+      ],
+      "@repositories/*": [
+        "src/framework/mongo/repositories/*"
+      ]
+    }
+  }
+}

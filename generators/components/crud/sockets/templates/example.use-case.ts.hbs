@@ -1,0 +1,12 @@
+import { Injectable } from '@nestjs/common';
+import { IDataServices } from '@framework/providers/data.provider';
+
+@Injectable()
+export class {{pascalCase nameEntity}}sUseCases {
+  constructor(private dataServices: IDataServices) {}
+
+  joinRoom(clientId: string) {
+    // TODO: add to database, send alert, etc...
+    console.log(clientId);
+  }
+}

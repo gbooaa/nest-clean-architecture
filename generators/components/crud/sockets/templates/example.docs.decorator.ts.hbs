@@ -1,0 +1,47 @@
+import { applyDecorators } from '@nestjs/common';
+import { AsyncApiPub } from 'nestjs-asyncapi';
+import { {{pascalCase nameEntity}}sEventsRoomDTO, {{pascalCase nameEntity}}sEventsMessageDTO } from '@domain/{{camelCase nameEntity}}s';
+import { {{pascalCase nameEntity}}sPatterns } from '../events';
+
+export function {{pascalCase nameEntity}}sDocs(endpoint: string) {
+  switch (endpoint) {
+    case 'handleJoinRoom':
+      return applyDecorators(
+        AsyncApiPub({
+          channel: {{pascalCase nameEntity}}sPatterns.join,
+          summary: 'Unirse a un room',
+          description: 'Evento para unirse a un room',
+          message: {
+            payload: {{pascalCase nameEntity}}sEventsRoomDTO,
+          },
+        }),
+      );
+
+    case 'handleIncommingMessage':
+      return applyDecorators(
+        AsyncApiPub({
+          channel: {{pascalCase nameEntity}}sPatterns.message,
+          summary: 'Enviar mensaje',
+          description: 'Envío de mensajes al broadcast',
+          message: {
+            payload: {{pascalCase nameEntity}}sEventsMessageDTO,
+          },
+        }),
+      );
+
+    case 'handleRoomLeave':
+      return applyDecorators(
+        AsyncApiPub({
+          channel: {{pascalCase nameEntity}}sPatterns.leave,
+          summary: 'Dejar un room',
+          description: 'Evento para dejar un room',
+          message: {
+            payload: {{pascalCase nameEntity}}sEventsRoomDTO,
+          },
+        }),
+      );
+
+    default:
+      break;
+  }
+}
