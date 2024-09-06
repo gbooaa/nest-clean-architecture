@@ -1,4 +1,5 @@
 export interface GendersEntity {
+  _id: string;
   name: string;
 }
 
